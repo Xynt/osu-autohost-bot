@@ -15,7 +15,7 @@ const PlayerQueue = require('./utils/playerQueue')
  */
 class Bot extends EventEmitter {
     /**
-     * @param {Bancho.BanchoClient} Client 
+     * @param {Bancho.BanchoClient} Client
      */
     constructor(Client) {
         super();
@@ -39,7 +39,7 @@ class Bot extends EventEmitter {
             console.log("Login successful!");
 
             this.channel = await this.client.getChannel(`#mp_${this.gameId}`)
-            
+
             console.log("Joining channel.");
             await this.channel.join();
 
@@ -82,6 +82,17 @@ class Bot extends EventEmitter {
         this.channel.lobby.on("matchFinished", (scores) => {
             this.matchRunning = false;
             this.playerQueue.next();
+        });
+
+        this.channel.lobby.on("host", (currentHost) => {
+            let correctHost = this.playerQueue.queue[0];
+            let correctNextHost = this.playerQueue.queue[1];
+
+            if (currentHost.user.id !== correctNextHost.user.id) {
+              this.channel.lobby.setHost(correctHost);
+              this.channel.sendMessage(`${this.correctHost.user.username}, you passed host over to ${this.currentHost.user.username}, but he is not the next on the list.`);
+              this.channel.sendMessage(`If you want to pass on host, type !skip in chat or pass host to ${this.correctNextHost.user.username}.`);
+            }
         });
 
         this.channel.lobby.on("matchStarted", async () => {
