@@ -30,18 +30,18 @@ class RestrictedBeatmapListener {
                 // Beatmap too high.
                 let message = `${this.bot.playerQueue.currentHost} this beatmap is too low, minimum stars are ${this.bot.maxminStarsStars}. `;
                 if (!this.matchStarted) {
-                    message += "If you start with these settings, match will be aborted and host will be passed to the next in line.";
+                    message += "If you start with these settings, the match will be aborted and host rights will be passed to the next in line.";
                 }
 
                 this.bot.channel.sendMessage(message);
             }
-    
+
             const tooHigh = await this._beatmapTooHigh();
             if (tooHigh == true && !this.bot.allowBeatmap) {
                 // Beatmap too high.
                 let message = `${this.bot.playerQueue.currentHost} this beatmap is too high, maximum stars are ${this.bot.maxStars}. `;
                 if (!this.matchStarted) {
-                    message += "If you start with these settings, match will be aborted and host will be passed to the next in line.";
+                    message += "If you start with these settings, the match will be aborted and host rights will be passed to the next in line.";
                 }
 
                 this.bot.channel.sendMessage(message);
@@ -73,7 +73,7 @@ class RestrictedBeatmapListener {
      */
     async _beatmapTooLow() {
         let difficulty = this.beatmap.difficultyRating;
-        
+
         if (this.hasDT) {
             try {
                 const result = await starRating.calculateStarRating(this.beatmap.id, ["DT"]);
